@@ -1,0 +1,39 @@
+services:
+  apache:
+    build: apache-php-lamp
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./prestashop_8.2.1:/app
+      - ./certs:/certs
+      - ./apache-php-lamp/vhost-apache.conf:/etc/apache2/sites-enabled/vhost-apache.conf
+    env_file:
+      - .env.dev
+    networks:
+      redelamplemp:
+        aliases:
+          - a23bernalrc.lan
+  basededatos:
+    image: mysql:latest
+    env_file:
+      - .env.dev
+    volumes:
+      - datos:/var/lib/mysql
+      - ./basededatos:/scripts
+    networks:
+      redelamplemp:
+  phpmyadmin:
+    image: phpmyadmin
+    container_name: prestashop_phpmyadmin
+    restart: always
+    ports:     
+      - "8080:80"
+    environment:
+      - PMA_HOST=basededatos
+    networks:
+      redelamplemp:
+volumes:
+  datos:
+networks:
+  redelamplemp:

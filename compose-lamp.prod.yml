@@ -1,0 +1,19 @@
+services:
+  apache:
+    build: apache-php-lamp
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./prestashop_8.2.1:/app
+      - ./certs:/certs
+      - ./apache-php-lamp/vhost-apache.conf:/etc/apache2/sites-enabled/vhost-apache.conf
+      - ./basededatos:/scripts
+    env_file:
+      - .env.prod
+    networks:
+      redelamplemp:
+        aliases:
+          - a23bernalrc.lan
+networks:
+  redelamplemp:
